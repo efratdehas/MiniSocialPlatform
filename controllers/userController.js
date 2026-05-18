@@ -10,10 +10,10 @@ class UserController {
             const user = await UserModel.findByCredentials(email, password);
 
             if (user) {
-                // success - return user data
+                // הצליח - פרטי המשתמש נכונים
                 res.json({ success: true, message: "Login successful", user });
             } else {
-                // failure - invalid credentials
+                // נכשל - פרטי המשתמש שגויים
                 res.status(401).json({ success: false, message: 'Email or password is incorrect' });
             }
         } catch (err) {

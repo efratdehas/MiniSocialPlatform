@@ -28,12 +28,13 @@ class UserModel {
     // יצירת משתמש חדש בשתי הטבלאות
     static async create(name, email, password, phone) {
         // הכנסה לטבלת המשתמשים
-        const [userResult] = await db.query(
-            'INSERT INTO users (phone, name, email) VALUES (?, ?, ?)', [phone, name, email]);
+        const query = 'INSERT INTO users (phone, name, email) VALUES (?, ?, ?)';
+        const [userResult] = await db.query(query, [phone, name, email]);
         const newUserId = userResult.insertId;
 
         // הכנסה לטבלת הסיסמאות עם ה-ID של המשתמש החדש
-        await db.query('INSERT INTO passwords (user_id, password) VALUES (?, ?)', [newUserId, password]);
+        const passwordQuery = 'INSERT INTO passwords (user_id, password) VALUES (?, ?)';
+        await db.query(passwordQuery, [newUserId, password]);
         
         return newUserId;
     }

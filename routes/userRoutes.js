@@ -1,7 +1,9 @@
 import { Router } from 'express';
-const router = Router();
+
 import userController from '../controllers/userController.js';
 import { validateRegister, validateLogin } from '../middleware/userValidation.js';
+
+const router = Router();
 
 // התחברות
 router.post('/login', validateLogin, userController.login);
