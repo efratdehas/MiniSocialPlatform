@@ -1,6 +1,7 @@
 import UserModel from '../models/userModel.js';
 
 class UserController {
+    
     // פונקציה לטיפול בבקשת התחברות
     static async login(req, res) {
         const { email, password } = req.body;

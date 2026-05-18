@@ -1,75 +1,8 @@
-// import PostModel from '../models/postModel.js';
-
-// class PostController {
-
-//     // שליפת כל הפוסטים עם פרטי המשתמשים
-//     static async getAllPosts(req, res) {
-//         try {
-//             const { page, limit } = req.query;
-//             const posts = await PostModel.getAll(page, limit);
-//             res.json({
-//                 success: true,
-//                 posts
-//             });
-
-//         } catch (err) {
-//             res.status(500).json({
-//                 success: false,
-//                 error: err.message
-//             });
-//         }
-//     }
-
-//     // שליפת פוסטים לפי משתמש ספציפי
-//     static async getPostsByUser(req, res) {
-//         try {
-//             const { userId } = req.params;
-//             const posts = await PostModel.getByUserId(userId);
-//             res.json({
-//                 success: true,
-//                 posts
-//             });
-
-//         } catch (err) {
-//             res.status(500).json({
-//                 success: false,
-//                 error: err.message
-//             });
-//         }
-//     }
-
-//     // הוספת פוסט
-//     static async createPost(req, res) {
-//         try {
-//             const { userId, title, body } = req.body;
-//             const postId = await PostModel.create(userId, title, body);
-//             res.status(201).json({
-//                 success: true,
-//                 message: 'Post created successfully',
-//                 postId
-//             });
-
-//         } catch (err) {
-//             res.status(500).json({
-//                 success: false,
-//                 error: err.message
-//             });
-//         }
-//     }
-// }
-
-
-// export default PostController;
-
-
-
-
-
-
 import PostModel from '../models/postModel.js';
 
 class PostController {
-    // שליפת כל הפוסטים עם פרטי המשתמשים (עם אפשרות לפגינציה) 
+
+    // שליפת כל הפוסטים עם פרטי המשתמשים עם ותמיכה בעימוד
     static async getAllPosts(req, res) {
         try {
             // שליפת פרמטרים לעימוד מהשאילתה
@@ -107,7 +40,7 @@ class PostController {
         }
     }
 
-    // עדכון פוסט
+    // עריכת פוסט
     static async updatePost(req, res) {
         try {
             const postId = req.params.id;

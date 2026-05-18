@@ -1,7 +1,8 @@
 import db from '../config/db.js';
 
 class PostModel {
-    // שליפת כל הפוסטים עם פרטי המשתמשים (עם אפשרות לפגינציה)
+    
+    // שליפת כל הפוסטים עם פרטי המשתמשים עם תמיכה בעימוד
     static async getAll(page = null, limit = null) {
         let query = `
             SELECT posts.*, users.name as user_name, users.email as user_email 
@@ -10,6 +11,7 @@ class PostModel {
             ORDER BY posts.id DESC`;
         
         const params = [];
+        
         if (page !== null && limit !== null) {
             const offset = (page - 1) * limit;
             query += ` LIMIT ? OFFSET ?`;
