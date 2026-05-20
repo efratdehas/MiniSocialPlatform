@@ -1,0 +1,102 @@
+.welcome-page-container {
+    position: relative;
+    width: 100%;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.background-watermark {
+    position: absolute;
+    top: 22%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40%;
+    opacity: 0.12;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.background-watermark img {
+    width: 100%;
+    height: auto;
+}
+
+.welcome-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+}
+
+.welcome-header h1 {
+    color: #6d0f0f;
+    font-size: 3rem;
+    margin-bottom: 8px;
+    font-weight: 800;
+}
+
+.welcome-header p {
+    color: #a05151;
+    font-size: 1.2rem;
+    margin-bottom: 50px;
+    letter-spacing: 0.5px;
+}
+
+.welcome-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 35px;
+    max-width: 1100px;
+}
+
+/* עיצוב הכרטיסים */
+.welcome-card {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 40px;
+    border-radius: 30px;
+    border: 1px solid #f0e6e6;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.welcome-card:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 20px 40px rgba(109, 15, 15, 0.12);
+    border-color: #6d0f0f;
+}
+
+.icon-circle {
+    width: 80px;
+    height: 80px;
+    background-color: #fdfaf9;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    color: #6d0f0f;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+    border: 1px solid #EEDBD6;
+}
+
+.welcome-card:hover .icon-circle {
+    background-color: #6d0f0f;
+    color: white;
+}
+
+.welcome-card h3 {
+    color: #333;
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+}
+
+.welcome-card p {
+    color: #a79797;
+    font-size: 1rem;
+}

@@ -41,6 +41,7 @@ export const validateRegister = (req, res, next) => {
     if (!isValidPhone(phone)) {
         return res.status(400).json({ success: false, message: "Invalid phone number format. Use only digits." });
     }
+
     next();
 };
 

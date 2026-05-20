@@ -1,7 +1,7 @@
 import UserModel from '../models/userModel.js';
 
 class UserController {
-    
+
     // פונקציה לטיפול בבקשת התחברות
     static async login(req, res) {
         const { email, password } = req.body;
@@ -16,6 +16,24 @@ class UserController {
             } else {
                 // נכשל - פרטי המשתמש שגויים
                 res.status(401).json({ success: false, message: 'Email or password is incorrect' });
+            }
+        } catch (err) {
+            res.status(500).json({ success: false, error: err.message });
+        }
+    }
+
+
+    // בדיקה האם קיים משתמש לפי ID
+    static async verifyUserExists(req, res) {
+        try {
+
+            const { id } = req.params;
+            const user = await UserModel.findByID(id);
+
+            if (user) {
+                res.status(200).json({ success: true, userExists: true, user });
+            } else {
+                res.status(200).json({ success: true, userExists: false });
             }
         } catch (err) {
             res.status(500).json({ success: false, error: err.message });
@@ -39,13 +57,13 @@ class UserController {
             }
 
             // אם השם פנוי, יוצרים משתמש חדש
-            const userId = await UserModel.create(name, email, password, phone);
+            const user = await UserModel.create(name, email, password, phone);
 
             // המשתמש נוצר בהצלחה
             res.status(201).json({
                 success: true,
                 message: "User registered successfully",
-                userId
+                user
             });
 
         } catch (err) {

@@ -2,14 +2,19 @@ import PostModel from '../models/postModel.js';
 
 class PostController {
 
-    // שליפת כל הפוסטים עם פרטי המשתמשים עם ותמיכה בעימוד
+    // שליפת כל הפוסטים עם פרטי המשתמשים עם ותמיכה בעימוד, חיפוש ומיון
     static async getAllPosts(req, res) {
         try {
-            // שליפת פרמטרים לעימוד מהשאילתה
             const page = req.query.page ? parseInt(req.query.page) : null;
             const limit = req.query.limit ? parseInt(req.query.limit) : null;
+            
+            // שליפת פרמטרי החיפוש והמיון מה-URL (מגיע מהריאקט)
+            const q = req.query.q || '';
+            const sort = req.query.sort || 'id';
+            const field = req.query.field || 'title';
 
-            const posts = await PostModel.getAll(page, limit);
+            // שליחה למודל
+            const posts = await PostModel.getAll(page, limit, q, sort, field);
 
             res.status(200).json({ success: true, posts });
         } catch (err) {

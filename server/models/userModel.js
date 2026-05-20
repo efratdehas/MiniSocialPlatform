@@ -1,14 +1,14 @@
 import db from '../config/db.js';
 
 class UserModel {
-    
+
     // פונקציה לאימות פרטי התחברות
     static async findByCredentials(email, password) {
         const query = `
             SELECT users.* FROM users 
             JOIN passwords ON users.id = passwords.user_id 
             WHERE users.email = ? AND passwords.password = ?`;
-        
+
         const [rows] = await db.query(query, [email, password]);
 
         // אם נמצא משתמש מתאים, נחזיר אותו, אחרת נחזיר undefined
@@ -21,7 +21,17 @@ class UserModel {
         const query = `SELECT * FROM users WHERE email = ?`;
         const [rows] = await db.query(query, [email]);
 
-         // מחזיר את המשתמש אם קיים, או undefined אם פנוי
+        // מחזיר את המשתמש אם קיים, או undefined אם פנוי
+        return rows[0];
+    }
+
+
+    // בדיקה אם כתובת אימייל כבר קיימת במערכת
+    static async findByID(id) {
+        const query = `SELECT * FROM users WHERE id = ?`;
+        const [rows] = await db.query(query, [id]);
+        
+        // מחזיר את המשתמש אם קיים, או undefined אם פנוי
         return rows[0];
     }
 
@@ -35,8 +45,12 @@ class UserModel {
         // הכנסה לטבלת הסיסמאות עם ה-ID של המשתמש החדש
         const passwordQuery = 'INSERT INTO passwords (user_id, password) VALUES (?, ?)';
         await db.query(passwordQuery, [newUserId, password]);
-        
-        return newUserId;
+
+        const selectQuery = 'SELECT * FROM users WHERE id = ?';
+        const [rows] = await db.query(selectQuery, [newUserId]);
+
+        // מחזיר את האובייקט המלא
+        return rows[0];
     }
 }
 

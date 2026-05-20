@@ -1,0 +1,48 @@
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 85vh;
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+.register-container form {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    padding: 30px;
+    width: 100%;
+    max-width: 400px;
+    border: 1px solid #f0f0f0;
+    text-align: center;
+}
+
+.register-container h2 {
+    margin-bottom: 25px;
+    color: #2c3e50;
+    font-size: 24px;
+}
+
+.register-container button[type="submit"] {
+    width: 100%;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.2s;
+}
+
+.register-container button[type="submit"]:hover {
+    background-color: #357abd;
+}
+
+.register-container p {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #7f8c8d;
+}

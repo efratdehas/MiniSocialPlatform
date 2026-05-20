@@ -1,0 +1,102 @@
+/* העטיפה של כל שורת הסינון */
+.Filter-bar-container {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    background: #ffffff;
+    padding: 15px 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+    border: 1px solid #f0f0f0;
+    flex-wrap: wrap; /* כדי שיישבר יפה במסכים קטנים */
+}
+
+/* עיצוב תיבת הבחירה (Select - Title/ID) */
+.Filter-bar-container select {
+    padding: 10px 15px;
+    border: 1px solid #dcdde1;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    color: #2c3e50;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.Filter-bar-container select:focus,
+.Filter-bar-container select:hover {
+    border-color: #4a90e2;
+    background-color: #ffffff;
+}
+
+/* עטיפת שדה החיפוש וה-X */
+.search-input-wrapper {
+    flex: 1; /* לוקח את כל המקום הפנוי בשורה */
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* שדה הטקסט לחיפוש */
+.search-input-wrapper input {
+    width: 100%;
+    padding: 10px 40px 10px 15px; /* ריווח בצד ימין כדי לפנות מקום ל-X */
+    border: 1px solid #dcdde1;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #2c3e50;
+    transition: all 0.2s ease;
+}
+
+.search-input-wrapper input:focus {
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+    outline: none;
+}
+
+/* כפתור ה-X לניקוי החיפוש */
+.clear-btn {
+    position: absolute;
+    right: 10px; /* ממקם אותו בתוך תיבת הטקסט בצד ימין */
+    background: none;
+    border: none;
+    color: #95a5a6;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.clear-btn:hover {
+    color: #e74c3c;
+    background-color: #fde8e7;
+}
+
+/* כפתור החלפת השדה (Swap Icon) */
+.switch-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f1f2f6;
+    color: #57606f;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 20px; /* גודל האייקון */
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.switch-btn:hover {
+    background-color: #4a90e2;
+    color: #ffffff;
+    transform: rotate(180deg); /* אנימציית סיבוב מדליקה כשעוברים עליו! */
+}

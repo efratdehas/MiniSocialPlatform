@@ -7,6 +7,7 @@ const router = Router();
 
 // התחברות
 router.post('/login', validateLogin, userController.login);
+router.get('/:id', userController.verifyUserExists);
 // הרשמה
 router.post('/register', validateRegister, userController.register);
 

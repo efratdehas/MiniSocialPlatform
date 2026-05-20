@@ -1,0 +1,255 @@
+.posts-container {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.posts-container h2 {
+    color: #2c3e50;
+    margin: 0;
+}
+
+/* התאמת העיצוב לסרגל הסינון הישן שלך */
+.posts-header-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+
+.view-toggle-btns {
+    display: flex;
+    gap: 8px;
+}
+
+.view-toggle-btns button {
+    background: #f1f2f6;
+    border: none;
+    color: #57606f;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.view-toggle-btns button:hover {
+    background: #e4e7eb;
+}
+
+.view-toggle-btns button.active {
+    background: #4a90e2;
+    color: white;
+}
+
+/* טופס יצירת פוסט */
+.create-post-form {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    border: 1px solid #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.create-post-form h3 {
+    margin: 0 0 5px 0;
+    color: #2c3e50;
+}
+
+.create-post-form input,
+.create-post-form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-family: inherit;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+.create-post-form textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+.create-post-form button {
+    align-self: flex-end;
+    background: #e5fff0;
+    color: #2ecc71;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.create-post-form button:hover {
+    background: #2ecc71;
+    color: #e5fff0;
+}
+
+/* רשימת פוסטים ככרטיסיות יפות */
+.posts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.post-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+    padding: 25px;
+    border: 1px solid #f0f0f0;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.post-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.post-title {
+    margin: 0 0 8px 0;
+    color: #2c3e50;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.post-title:hover {
+    color: #4a90e2;
+}
+
+.post-author {
+    font-size: 13px;
+    color: #95a5a6;
+    margin: 0 0 15px 0;
+}
+
+.post-body {
+    color: #34495e;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    font-size: 15px;
+}
+
+.post-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.post-actions button {
+    background: #f1f2f6;
+    border: none;
+    color: #2f3542;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.post-actions button:hover {
+    background: #e4e7eb;
+}
+
+.owner-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.owner-actions button.delete-btn {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.owner-actions button.delete-btn:hover {
+    background-color: #c0392b;
+}
+
+.no-results {
+    text-align: center;
+    color: #7f8c8d;
+    padding: 30px;
+    background: white;
+    border-radius: 8px;
+}
+
+/* עיצוב כפתור טעינת פוסטים נוספים */
+.load-more-btn {
+    display: block;
+    margin: 20px auto;
+    background-color: #f1f2f6;
+    color: #4a90e2;
+    border: 1px solid #4a90e2;
+    padding: 10px 25px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.load-more-btn:hover {
+    background-color: #4a90e2;
+    color: white;
+}
+
+/* אזור הפעולות בתחתית הפוסט */
+ .post-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #f8f9fa;
+}
+
+/* עיצוב משותף לכל הכפתורים בפוסט */
+.post-actions button {
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+
+.comments-btn {
+    background-color: #f1f2f6 !important;
+    border: none;
+    color: #4a90e2 !important;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    transition: all 0.2s ease;
+}
+
+.comments-btn:hover {
+    background-color: #4a90e2 !important;
+    color: #f1f2f6 !important;
+}
+
+/* כפתור המחיקה */
+.delete-btn {
+    background-color: #fff0f0 !important;
+    color: #e74c3c !important; 
+}
+
+.delete-btn:hover {
+    background-color: #e74c3c !important;
+    color: white !important;
+}

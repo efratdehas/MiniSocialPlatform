@@ -1,7 +1,7 @@
 import { createPool } from 'mysql2';
 import 'dotenv/config';
 
-// יצירת מאגר חיבורים (Pool)
+// יצירת מאגר חיבורים
 const pool = createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,

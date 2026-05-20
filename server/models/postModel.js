@@ -1,17 +1,38 @@
 import db from '../config/db.js';
 
 class PostModel {
-    
-    // שליפת כל הפוסטים עם פרטי המשתמשים עם תמיכה בעימוד
-    static async getAll(page = null, limit = null) {
+
+    static async getAll(page = null, limit = null, searchQuery = '', sortBy = 'id', searchField = 'title') {
         let query = `
             SELECT posts.*, users.name as user_name, users.email as user_email 
             FROM posts 
             JOIN users ON posts.user_id = users.id 
-            ORDER BY posts.id DESC`;
+        `;
         
         const params = [];
         
+        // הוספת סינון
+        if (searchQuery) {
+            // אם המשתמש בחר לחפש ספציפית לפי מספר מזהה
+            if (searchField === 'id') {
+                query += ` WHERE posts.id = ?`;
+                params.push(searchQuery);
+            } 
+            // אם המשתמש בחר לחפש לפי כותרת
+            else {
+                query += ` WHERE posts.title LIKE ? OR posts.body LIKE ?`;
+                params.push(`%${searchQuery}%`, `%${searchQuery}%`);
+            }
+        }
+
+        // הוספת מיון דינמי
+        const allowedSortColumns = ['id', 'title'];
+        const finalSort = allowedSortColumns.includes(sortBy) ? `posts.${sortBy}` : 'posts.id';
+        const sortOrder = finalSort === 'posts.id' ? 'DESC' : 'ASC'; 
+        
+        query += ` ORDER BY ${finalSort} ${sortOrder}`;
+
+        // הוספת עימוד
         if (page !== null && limit !== null) {
             const offset = (page - 1) * limit;
             query += ` LIMIT ? OFFSET ?`;
@@ -41,28 +62,21 @@ class PostModel {
         return result.insertId; 
     }
 
-    // עדכון פוסט - רק אם הוא שייך למשתמש שמבקש לעדכן
+    // עדכון פוסט
     static async update(postId, userId, title, body) {
-        // השאילתה הזו תעבוד אך ורק אם גם מספר הפוסט וגם מספר המשתמש תואמים
         const query = `UPDATE posts SET title = ?, body = ? WHERE id = ? AND user_id = ?`;
         const [result] = await db.query(query, [title, body, postId, userId]);
-        return result.affectedRows > 0; // יחזיר שקר (false) אם מישהו מנסה לערוך פוסט לא שלו
+        return result.affectedRows > 0;
     }
 
-    // מחיקת פוסט - רק אם הוא שייך למשתמש שמבקש למחוק + מחיקת כל התגובות שלו
+    // מחיקת פוסט
     static async delete(postId, userId) {
-        // בדיקה שהפוסט קיים ושייך למשתמש שמבקש למחוק אותו
         const checkQuery = `SELECT id FROM posts WHERE id = ? AND user_id = ?`;
         const [rows] = await db.query(checkQuery, [postId, userId]);
 
-        if (rows.length === 0) {
-            return false;
-        }
+        if (rows.length === 0) return false;
 
-        // מחיקת התגברות של הפוסט
         await db.query(`DELETE FROM comments WHERE post_id = ?`, [postId]);
-
-        // מחיקת הפוסט עצמו
         await db.query(`DELETE FROM posts WHERE id = ?`, [postId]);
 
         return true;
