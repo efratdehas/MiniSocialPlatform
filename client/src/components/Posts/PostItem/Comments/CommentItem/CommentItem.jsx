@@ -1,72 +1,74 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../../../../context/AuthContext';
-import api from '../../../../../services/api';
+import { useComments } from '../../../../../context/CommentsContext';
 import './CommentItem.css';
 
-function CommentItem({ comment, onRefresh }) {
+function CommentItem({ comment }) {
     const { user } = useAuth();
+    const { updateComment, deleteComment } = useComments();
+
     const [isEditing, setIsEditing] = useState(false);
     const [editBody, setEditBody] = useState(comment.body);
 
-    // עדכון תגובה - מבוצע ישירות מתוך קומפוננטת התגובה העצמאית
-    const handleUpdate = async () => {
+    const handleUpdate = async (e) => {
+        e.preventDefault();
         if (!editBody.trim()) return;
-        try {
-            const response = await api.put(`/comments/${comment.id}`, { 
-                userId: user.id, 
-                body: editBody 
-            });
-            if (response.data.success) {
-                setIsEditing(false);
-                onRefresh();
-            }
-        } catch (err) {
-            console.error("Error updating comment:", err);
+
+        const data = await updateComment(comment.id, user.id, editBody);
+        if (data.success) {
+            setIsEditing(false); // יוצא ממצב עריכה
         }
     };
 
-    // מחיקת תגובה - מבוצע ישירות מתוך קומפוננטת התגובה העצמאית
     const handleDelete = async () => {
         if (!window.confirm("Are you sure you want to delete this comment?")) return;
-        try {
-            const response = await api.delete(`/comments/${comment.id}`, { 
-                data: { userId: user.id } 
-            });
-            if (response.data.success) {
-                onRefresh(); // מרענן את הרשימה אצל האבא
-            }
-        } catch (err) {
-            console.error("Error deleting comment:", err);
-        }
+        await deleteComment(comment.id, user.id);
     };
 
     return (
-        <div className="comment-item">
+        <div className="comment-item-card">
             {isEditing ? (
-                <div className="edit-comment-mode">
-                    <input 
-                        type="text" 
-                        value={editBody} 
-                        onChange={(e) => setEditBody(e.target.value)} 
+                /* טופס עריכה מקומי שמוצג במקום התגובה המקורית */
+                <form onSubmit={handleUpdate} className="edit-comment-form">
+                    <input
+                        type="text"
+                        value={editBody}
+                        onChange={(e) => setEditBody(e.target.value)}
+                        required
                     />
-                    <button onClick={handleUpdate}>Save</button>
-                    <button onClick={() => setIsEditing(false)}>Cancel</button>
-                </div>
+                    <div className="edit-comment-actions">
+                        <button type="submit" className="save-comment-btn">Save</button>
+                        <button type="button" className="cancel-comment-btn" onClick={() => setIsEditing(false)}>Cancel</button>
+                    </div>
+                </form>
             ) : (
-                <>
-                    <p className="comment-meta">
-                        <strong>{comment.user_name || `User #${comment.user_id}`}</strong>:
-                    </p>
-                    <p className="comment-text">{comment.body}</p>
-                    
-                    {/* הרשאות עריכה ומחיקה רק לבעל התגובה */}
-                    {comment.user_id === user.id && (
-                        <div className="comment-actions">
-                            <span className="action-link" onClick={() => setIsEditing(true)}>Edit</span>
-                            <span className="action-link delete" onClick={handleDelete}>Delete</span>
+                /* תצוגה רגילה ומסודרת של התגובה */
+                <div className="comment-content-wrapper">
+                    <div className="comment-header-row">
+                        <div className="comment-user-badge">
+                            <span className="comment-author-name">
+                                By: {comment.user_name || `User #${comment.user_id}`}
+                            </span>
+                            {comment.user_id === user.id && <span className="my-comment-tag">Me</span>}
                         </div>
-                    )}
-                </>
+
+                        {/* כפתורי ניהול המוצגים רק לכותב התגובה המקורית */}
+                        {comment.user_id === user.id && (
+                            <div className="comment-owner-actions">
+                                <button className="comment-edit-btn" onClick={() => setIsEditing(true)} title="Edit">✏️</button>
+                                <button className="comment-delete-btn" onClick={handleDelete} title="Delete">🗑️</button>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* קו הפרדה פנימי דק */}
+                    <div className="comment-inner-divider"></div>
+
+                    {/* תוכן התגובה שזורם מתחת למבנה הכותרת */}
+                    <div className="comment-body-area">
+                        <p className="comment-body-text">{comment.body}</p>
+                    </div>
+                </div>
             )}
         </div>
     );

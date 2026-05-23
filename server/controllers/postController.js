@@ -7,7 +7,7 @@ class PostController {
         try {
             const page = req.query.page ? parseInt(req.query.page) : null;
             const limit = req.query.limit ? parseInt(req.query.limit) : null;
-            
+
             // שליפת פרמטרי החיפוש והמיון מה-URL (מגיע מהריאקט)
             const q = req.query.q || '';
             const sort = req.query.sort || 'id';
@@ -25,7 +25,7 @@ class PostController {
     // פוסטים לפי משתמש ספציפי
     static async getPostsByUser(req, res) {
         try {
-            const userId = req.params.userId; 
+            const userId = req.params.userId;
             const posts = await PostModel.getByUserId(userId);
             res.status(200).json({ success: true, posts });
         } catch (err) {
@@ -52,7 +52,7 @@ class PostController {
             const { userId, title, body } = req.body;
 
             const isUpdated = await PostModel.update(postId, userId, title, body);
-            
+
             if (isUpdated) {
                 res.status(200).json({ success: true, message: "Post updated successfully" });
             } else {
@@ -75,6 +75,22 @@ class PostController {
                 res.status(200).json({ success: true, message: "Post and its comments deleted successfully" });
             } else {
                 res.status(403).json({ success: false, message: "Unauthorized to delete this post" });
+            }
+        } catch (err) {
+            res.status(500).json({ success: false, error: err.message });
+        }
+    }
+
+    // שליפת פוסט ספציפי לפי מזהה
+    static async getPostById(req, res) {
+        try {
+            const postId = req.params.id;
+            const post = await PostModel.getById(postId);
+
+            if (post) {
+                res.status(200).json({ success: true, post });
+            } else {
+                res.status(404).json({ success: false, message: "Post not found" });
             }
         } catch (err) {
             res.status(500).json({ success: false, error: err.message });

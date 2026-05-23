@@ -3,10 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import './Info.css';
 
 function Info() {
-    // שולפים מהקונטקסט רק את ה-user הנוכחי (הבסיסי) ואת פונקציית השליפה החדשה
     const { user, fetchFullUserData } = useAuth();
-    
-    // יוז-סטייט מקומי שמחזיק את הפרופיל המלא רק בזמן השהות בעמוד זה
     const [userProfile, setUserProfile] = useState(null);
     const [loadingDetails, setLoadingDetails] = useState(true);
     const [errorMsg, setErrorMsg] = useState('');

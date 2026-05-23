@@ -15,5 +15,7 @@ router.post('/', validatePost, PostController.createPost);
 router.put('/:id', validatePost, PostController.updatePost);
 // מחיקת פוסט
 router.delete('/:id', PostController.deletePost);
+// שליפת פוסט לפי מזהה
+router.get('/:id', PostController.getPostById);
 
 export default router;

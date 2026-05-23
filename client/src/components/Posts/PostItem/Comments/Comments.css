@@ -72,3 +72,32 @@
     background: #edf2f7;
     color: #2c3e50;
 }
+
+.load-more-comments-btn {
+    display: block;
+    width: 100%;
+    background-color: #ffffff;
+    color: #4a90e2;
+    border: 1px solid #e4e7eb;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    margin-top: 15px;
+    transition: all 0.2s ease;
+}
+
+.load-more-comments-btn:hover {
+    background-color: #f8fafc;
+    border-color: #4a90e2;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+}
+
+.no-comments {
+    text-align: center;
+    color: #94a3b8;
+    font-size: 13px;
+    margin: 15px 0;
+}

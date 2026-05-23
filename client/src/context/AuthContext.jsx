@@ -35,7 +35,6 @@ export const AuthProvider = ({ children }) => {
 
             if (savedUserId) {
                 try {
-                    // פנייה לשרת לקבלת פרטי המשתמש העדכניים (כולל השם שלו)
                     const data = await AuthService.getUserById(savedUserId);
 
                     if (data.success && data.userExists) {
@@ -65,10 +64,10 @@ export const AuthProvider = ({ children }) => {
             const data = await AuthService.login(email, password);
 
             if (data.success && data.user) {
-                // בלוקל סטורג' שומרים אך ורק את ה-ID כמחרוזת פשוטה!
+                // שמירת הID ב-LocalStorage
                 localStorage.setItem('loggedUserId', data.user.id);
                 
-                // בסטייט הגלובלי שומרים אך ורק את ה-ID והשם
+                // שמירת הID ושם בלבד בסטייט
                 const userToState = { id: data.user.id, name: data.user.name };
                 dispatch({ type: 'LOGIN_SUCCESS', payload: userToState });
                 return { success: true };
@@ -86,10 +85,10 @@ export const AuthProvider = ({ children }) => {
             const data = await AuthService.register(name, email, password, phone);
 
             if (data.success && data.user) {
-                // בלוקל סטורג' שומרים אך ורק את ה-ID
+                // שמירת הID ב-LocalStorage
                 localStorage.setItem('loggedUserId', data.user.id);
                 
-                // בסטייט שומרים רק ID ושם
+                // שמירת הID ושם בלבד בסטייט
                 const userToState = { id: data.user.id, name: data.user.name };
                 dispatch({ type: 'LOGIN_SUCCESS', payload: userToState });
                 return { success: true, message: data.message };
@@ -111,7 +110,7 @@ export const AuthProvider = ({ children }) => {
         try {
             const data = await AuthService.getUserById(userId);
             if (data.success && data.user) {
-                return { success: true, user: data.user }; // מחזיר את האובייקט המלא המעודכן מה-DB
+                return { success: true, user: data.user };
             }
             return { success: false, message: "User not found" };
         } catch (error) {

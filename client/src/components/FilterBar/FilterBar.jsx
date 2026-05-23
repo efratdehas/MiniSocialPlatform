@@ -30,7 +30,7 @@ function FilterBar({ criteria = [], search, setSearch, sortBy, setSortBy }) {
                 )}
             </div>
 
-            {/* כפתור להחלפת שדה החיפוש המבוקש (title / id וכדומה) */}
+            {/* כפתור להחלפת שדה החיפוש המבוקש */}
             <button className="switch-btn" onClick={() => search.changeFiled()}>
                 <PiSwap />
             </button>

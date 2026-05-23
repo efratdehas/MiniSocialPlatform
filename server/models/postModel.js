@@ -8,16 +8,16 @@ class PostModel {
             FROM posts 
             JOIN users ON posts.user_id = users.id 
         `;
-        
+
         const params = [];
-        
+
         // הוספת סינון
         if (searchQuery) {
             // אם המשתמש בחר לחפש ספציפית לפי מספר מזהה
             if (searchField === 'id') {
                 query += ` WHERE posts.id = ?`;
                 params.push(searchQuery);
-            } 
+            }
             // אם המשתמש בחר לחפש לפי כותרת
             else {
                 query += ` WHERE posts.title LIKE ? OR posts.body LIKE ?`;
@@ -28,8 +28,8 @@ class PostModel {
         // הוספת מיון דינמי
         const allowedSortColumns = ['id', 'title'];
         const finalSort = allowedSortColumns.includes(sortBy) ? `posts.${sortBy}` : 'posts.id';
-        const sortOrder = finalSort === 'posts.id' ? 'DESC' : 'ASC'; 
-        
+        const sortOrder = finalSort === 'posts.id' ? 'DESC' : 'ASC';
+
         query += ` ORDER BY ${finalSort} ${sortOrder}`;
 
         // הוספת עימוד
@@ -59,7 +59,7 @@ class PostModel {
     static async create(userId, title, body) {
         const query = `INSERT INTO posts (user_id, title, body) VALUES (?, ?, ?)`;
         const [result] = await db.query(query, [userId, title, body]);
-        return result.insertId; 
+        return result.insertId;
     }
 
     // עדכון פוסט
@@ -80,6 +80,17 @@ class PostModel {
         await db.query(`DELETE FROM posts WHERE id = ?`, [postId]);
 
         return true;
+    }
+
+    // קבלת פוסט לפי מזהה
+    static async getById(postId) {
+        const query = `
+        SELECT posts.*, users.name as user_name, users.email as user_email 
+        FROM posts 
+        JOIN users ON posts.user_id = users.id 
+        WHERE posts.id = ?`;
+        const [rows] = await db.query(query, [postId]);
+        return rows[0]; // מחזיר את הפוסט הבודד שנמצא, או undefined
     }
 }
 

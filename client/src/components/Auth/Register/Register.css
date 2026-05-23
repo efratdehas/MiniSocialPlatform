@@ -2,6 +2,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
     min-height: 85vh;
     font-family: system-ui, -apple-system, sans-serif;
 }

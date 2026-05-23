@@ -1,46 +1,67 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import api from '../../../services/api';
+import React, { useState } from 'react';
+import { useAuth } from '../../../context/AuthContext';
+import { usePosts } from '../../../context/PostsContext';
 import Comments from './Comments/Comments';
 import './PostItem.css';
 
-function PostItem() {
-    const { postID } = useParams();
-    const [post, setPost] = useState(null);
+function PostItem({ post }) {
+    const { user } = useAuth();
+    const { updatePost, deletePost } = usePosts();
+
     const [showComments, setShowComments] = useState(false);
-    const navigate = useNavigate();
+    const [isEditing, setIsEditing] = useState(false);
+    const [editTitle, setEditTitle] = useState(post.title);
+    const [editBody, setEditBody] = useState(post.body);
 
-    useEffect(() => {
-        const fetchPost = async () => {
-            try {
-                const response = await api.get(`/posts`);
-                if (response.data.success) {
-                    const found = response.data.posts.find(p => p.id === Number(postID));
-                    setPost(found);
-                }
-            } catch (err) {
-                console.error(err);
-            }
-        };
-        fetchPost();
-    }, [postID]);
+    const handleUpdate = async (e) => {
+        e.preventDefault();
+        const data = await updatePost(post.id, user.id, editTitle, editBody);
+        if (data.success) {
+            setIsEditing(false);
+        }
+    };
 
-    if (!post) return <div className="loading">Loading post...</div>;
+    const handleDelete = async () => {
+        if (!window.confirm("Are you sure you want to delete this post?")) return;
+        await deletePost(post.id, user.id);
+    };
 
     return (
-        <div className="single-post-container">
-            <button className="back-btn" onClick={() => navigate(-1)}>← Back to Posts</button>
-            <div className="main-post-card">
-                <h2>{post.title}</h2>
-                <p className="author">By: {post.user_name || `User #${post.user_id}`}</p>
-                <p className="content">{post.body}</p>
-                
-                {/* כפתור החלפה דינמי ללא ספריות חיצוניות */}
-                <button className="toggle-comments-btn" onClick={() => setShowComments(!showComments)}>
-                    {showComments ? 'Close Comments 🔼' : 'Open Comments 🔽'}
-                </button>
-            </div>
-            
+        <div className="post-card">
+            {isEditing ? (
+                /* טופס עריכה מקומי בתוך הכרטיסייה */
+                <form onSubmit={handleUpdate} className="edit-post-form">
+                    <input type="text" value={editTitle} onChange={(e) => setEditTitle(e.target.value)} required />
+                    <textarea value={editBody} onChange={(e) => setEditBody(e.target.value)} required />
+                    <div className="edit-actions">
+                        <button type="submit" className="save-btn">Save</button>
+                        <button type="button" className="cancel-btn" onClick={() => setIsEditing(false)}>Cancel</button>
+                    </div>
+                </form>
+            ) : (
+                /* תצוגה רגילה של כרטיסיית הפוסט */
+                <>
+                    <h3 className="post-title">{post.title}</h3>
+                    <p className="post-author">By: {post.user_name || `User #${post.user_id}`} {post.user_id === user.id ? "(Me)" : ""}</p>
+                    <p className="post-body">{post.body}</p>
+                    
+                    <div className="post-actions">
+                        <button className="comments-btn" onClick={() => setShowComments(!showComments)}>
+                            {showComments ? 'Close Comments 🔼' : 'Open Comments 🔽'}
+                        </button>
+                        
+                        {/* כפתורי ניהול המופיעים רק לבעל הפוסט */}
+                        {post.user_id === user.id && (
+                            <div className="owner-actions">
+                                <button className="edit-btn" onClick={() => setIsEditing(true)}>Edit ✏️</button>
+                                <button className="delete-btn" onClick={handleDelete}>Delete 🗑️</button>
+                            </div>
+                        )}
+                    </div>
+                </>
+            )}
+
+            {/* רנדור התגובות ישירות מתחת לכרטיסייה במידה והן פתוחות */}
             {showComments && <Comments postId={post.id} />}
         </div>
     );

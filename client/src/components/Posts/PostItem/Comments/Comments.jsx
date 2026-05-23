@@ -1,58 +1,71 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../../../context/AuthContext';
-import api from '../../../../services/api';
-import CommentItem from './CommentItem/CommentItem';
+import { useComments } from '../../../../context/CommentsContext';
+import CommentItem from './CommentItem/CommentItem'; // מייבאים את האייטם הבודד
 import './Comments.css';
 
 function Comments({ postId }) {
     const { user } = useAuth();
-    const [comments, setComments] = useState([]);
-    const [page, setPage] = useState(1);
-    const [hasMore, setHasMore] = useState(true);
-    const [newComment, setNewComment] = useState('');
+    const { comments, page, setPage, hasMore, fetchComments, addComment } = useComments();
+    
+    const [newCommentBody, setNewCommentBody] = useState('');
 
-    const fetchComments = async (isLoadMore = false) => {
-        try {
-            const limit = 3;
-            const response = await api.get(`/comments/post/${postId}?page=${page}&limit=${limit}`);
-            if (response.data.success) {
-                const data = response.data.comments;
-                setHasMore(data.length === limit);
-                setComments(prev => isLoadMore ? [...prev, ...data] : data);
-            }
-        } catch (err) { console.error(err); }
-    };
-
+    // טעינה ראשונית של התגובות ברגע שהקומפוננטה נפתחת
     useEffect(() => {
-        fetchComments(page > 1);
-    }, [page, postId]);
+        setPage(1);
+        fetchComments(postId, false);
+    }, [postId]);
 
-    const handleAddComment = async (e) => {
+    // טעינת דפים נוספים בלחיצה על Load More
+    useEffect(() => {
+        if (page > 1) {
+            fetchComments(postId, true);
+        }
+    }, [page]);
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!newComment.trim()) return;
-        try {
-            const response = await api.post('/comments', { postId, userId: user.id, body: newComment });
-            if (response.data.success) {
-                setNewComment('');
-                setPage(1);
-                fetchComments(false);
-            }
-        } catch (err) { console.error(err); }
+        if (!newCommentBody.trim()) return;
+
+        const data = await addComment(postId, user.id, newCommentBody);
+        if (data.success) {
+            setNewCommentBody('');
+            fetchComments(postId, false);
+        }
     };
 
     return (
         <div className="comments-section">
-            <h3>Comments</h3>
-            <form onSubmit={handleAddComment} className="add-comment-form">
-                <input type="text" value={newComment} onChange={(e) => setNewComment(e.target.value)} required />
-                <button type="submit">Send</button>
+            <h4>Comments</h4>
+
+            {/* טופס הוספת תגובה חדשה */}
+            <form onSubmit={handleSubmit} className="add-comment-form">
+                <input 
+                    type="text" 
+                    placeholder="Write a comment..." 
+                    value={newCommentBody} 
+                    onChange={(e) => setNewCommentBody(e.target.value)} 
+                    required 
+                />
+                <button type="submit">Add Comment</button>
             </form>
+
+            {/* רשימת התגובות */}
             <div className="comments-list">
-                {comments.map(c => <CommentItem key={c.id} comment={c} onRefresh={() => { setPage(1); fetchComments(false); }} />)}
+                {comments.map(comment => (
+                    // שולחים את אובייקט התגובה כ-prop לתוך האייטם הבודד
+                    <CommentItem key={comment.id} comment={comment} />
+                ))}
+
+                {comments.length === 0 && <p className="no-comments">No comments yet. Be the first to comment!</p>}
+
+                {/* כפתור טעינת עוד תגובות */}
+                {hasMore && comments.length > 0 && (
+                    <button className="load-more-comments-btn" onClick={() => setPage(p => p + 1)}>
+                        Load Older Comments
+                    </button>
+                )}
             </div>
-            {hasMore && comments.length > 0 && (
-                <button className="load-more-btn" onClick={() => setPage(p => p + 1)}>Load More Comments</button>
-            )}
         </div>
     );
 }
