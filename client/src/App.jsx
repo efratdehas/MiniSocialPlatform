@@ -21,7 +21,7 @@ import PostItem from './components/Posts/PostItem/PostItem';
 import './App.css';
 
 function AppRoutes() {
-  // משתמשים במשתנים המאובטחים והמעודכנים מהקונטקסט החדש שלנו
+  // משתמשים במשתנים המאובטחים והמעודכנים
   const { user, loading } = useAuth();
 
   if (loading) {
